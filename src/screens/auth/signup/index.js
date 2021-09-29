@@ -1,14 +1,15 @@
-import React, { useState } from 'react';
 import './main.css';
 import './util.css';
 
+import React, { useState } from 'react';
+import { Link } from 'react-router-dom';
+
 import FacebookIcon from '@material-ui/icons/Facebook';
 import GoogleIcon from '@material-ui/icons/GTranslate';
-import TwitterIcon from '@material-ui/icons/Twitter';
+import GithubIcon from '@material-ui/icons/GitHub';
 
-import { Link } from 'react-router-dom';
-import { handle_email_password_signup } from 'services/firebase/login-services';
 import useSnackbar, { types } from 'utils/snackbar';
+import { handle_email_password_signup, handle_facebook_login, handle_github_login, handle_gmail_login } from 'services/firebase/login-services';
 
 function SignupScreen() {
 	const [email, setEmail] = useState('');
@@ -18,6 +19,33 @@ function SignupScreen() {
 	const handleNormalSignup = async () => {
 		try {
 			await handle_email_password_signup(email, password);
+			openSnackbar('User Signed Up Successfully!', types.SNACKBAR_SUCCESS);
+		} catch (err) {
+			openSnackbar(err.message);
+		}
+	};
+
+	const handleGoogleLogin = async () => {
+		try {
+			await handle_gmail_login();
+			openSnackbar('User Signed Up Successfully!', types.SNACKBAR_SUCCESS);
+		} catch (err) {
+			openSnackbar(err.message);
+		}
+	};
+
+	const handleGithubLogin = async () => {
+		try {
+			await handle_github_login();
+			openSnackbar('User Signed Up Successfully!', types.SNACKBAR_SUCCESS);
+		} catch (err) {
+			openSnackbar(err.message);
+		}
+	};
+
+	const handleFacebookLogin = async () => {
+		try {
+			await handle_facebook_login();
 			openSnackbar('User Signed Up Successfully!', types.SNACKBAR_SUCCESS);
 		} catch (err) {
 			openSnackbar(err.message);
@@ -54,13 +82,13 @@ function SignupScreen() {
 							<span>Or Sign Up Using</span>
 						</div>
 						<div className='flex-c-m'>
-							<button onPress={() => {}} className='login100-social-item bg1'>
+							<button onPress={handleFacebookLogin} className='login100-social-item bg1'>
 								<FacebookIcon />
 							</button>
-							<button onPress={() => {}} className='login100-social-item bg2'>
-								<TwitterIcon />
+							<button onPress={handleGithubLogin} className='login100-social-item bg2'>
+								<GithubIcon />
 							</button>
-							<button onPress={() => {}} className='login100-social-item bg3'>
+							<button onPress={handleGoogleLogin} className='login100-social-item bg3'>
 								<GoogleIcon />
 							</button>
 						</div>

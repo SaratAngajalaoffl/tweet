@@ -24,6 +24,33 @@ function LoginScreen() {
 		}
 	};
 
+	const handleGoogleLogin = async () => {
+		try {
+			await handle_gmail_login();
+			openSnackbar('User Signed Up Successfully!', types.SNACKBAR_SUCCESS);
+		} catch (err) {
+			openSnackbar(err.message);
+		}
+	};
+
+	const handleGithubLogin = async () => {
+		try {
+			await handle_github_login();
+			openSnackbar('User Signed Up Successfully!', types.SNACKBAR_SUCCESS);
+		} catch (err) {
+			openSnackbar(err.message);
+		}
+	};
+
+	const handleFacebookLogin = async () => {
+		try {
+			await handle_facebook_login();
+			openSnackbar('User Signed Up Successfully!', types.SNACKBAR_SUCCESS);
+		} catch (err) {
+			openSnackbar(err.message);
+		}
+	};
+
 	return (
 		<div>
 			<div className='limiter'>
@@ -53,13 +80,13 @@ function LoginScreen() {
 							<span>Or Log In Using</span>
 						</div>
 						<div className='flex-c-m'>
-							<button onClick={handle_facebook_login} className='login100-social-item bg1'>
+							<button onClick={handleFacebookLogin} className='login100-social-item bg1'>
 								<FacebookIcon />
 							</button>
-							<button onClick={handle_github_login} className='login100-social-item bg2'>
+							<button onClick={handleGithubLogin} className='login100-social-item bg2'>
 								<GithubIcon />
 							</button>
-							<button onClick={handle_gmail_login} className='login100-social-item bg3'>
+							<button onClick={handleGoogleLogin} className='login100-social-item bg3'>
 								<GoogleIcon />
 							</button>
 						</div>

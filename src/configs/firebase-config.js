@@ -7,6 +7,7 @@ const firebaseApp = firebase.initializeApp({
 	storageBucket: 'tweet-9beb9.appspot.com',
 	messagingSenderId: '764914381278',
 	appId: '1:764914381278:web:47efc1d6a8996e2a196d4f',
+	databaseURL: 'https://tweet-9beb9-default-rtdb.asia-southeast1.firebasedatabase.app',
 });
 
 export default firebaseApp;

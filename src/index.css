@@ -4,6 +4,10 @@ body {
 	-moz-osx-font-smoothing: grayscale;
 }
 
+#root {
+	overflow-y: hidden;
+}
+
 * {
 	box-sizing: border-box;
 	margin: 0;
