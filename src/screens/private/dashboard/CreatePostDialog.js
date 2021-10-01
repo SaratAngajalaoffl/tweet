@@ -3,6 +3,7 @@ import React, { useState } from 'react';
 import useSnackbar, { types } from 'utils/snackbar';
 import { Input } from '@material-ui/core';
 import { create_discussion } from 'services/firebase/discussion-service';
+import { get_detection } from 'services/detection/bullying-detection';
 
 function CreatePostDialog({ setIsDialogOpen, user }) {
 	const [title, setTitle] = useState('');
@@ -11,9 +12,10 @@ function CreatePostDialog({ setIsDialogOpen, user }) {
 
 	const handleStartDiscussion = async () => {
 		try {
+			const { detection } = await get_detection(`${title} ${description}`);
+			openSnackbar(`Detection Returned by the model is ${detection}!`, types.SNACKBAR_SUCCESS);
 			await create_discussion(user, title, description);
 			setIsDialogOpen(false);
-			openSnackbar('Discussion Created Successfully!', types.SNACKBAR_SUCCESS);
 		} catch (err) {
 			openSnackbar(err.message);
 		}

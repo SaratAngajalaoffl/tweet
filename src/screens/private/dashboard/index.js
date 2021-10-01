@@ -19,6 +19,8 @@ import Typography from '@material-ui/core/Typography';
 import ChatBubbleIcon from '@material-ui/icons/ChatBubble';
 import CloseIcon from '@material-ui/icons/Close';
 import SendIcon from '@material-ui/icons/Send';
+import { get_detection } from 'services/detection/bullying-detection';
+import useSnackbar, { types } from 'utils/snackbar';
 
 const useStyles = makeStyles((theme) => ({
 	root: {
@@ -57,6 +59,7 @@ function DashboardScreen() {
 	const [discussions, setDiscussions] = useState([]);
 	const [expanded, setExpanded] = useState(null);
 	const [comment, setComment] = useState('');
+	const openSnackbar = useSnackbar();
 
 	useEffect(() => {
 		firebaseApp.auth().onAuthStateChanged((auth) => {
@@ -113,7 +116,12 @@ function DashboardScreen() {
 
 	const handleAddComment = async (discussion_id) => {
 		try {
-			await add_comment(discussion_id, comment, userData, user.uid);
+			const discussion_comment = comment;
+			setComment('');
+			openSnackbar(`Adding Comment!`, types.SNACKBAR_INFO, 5000);
+			const { detection } = await get_detection(discussion_comment);
+			openSnackbar(`Detection Returned by the model is ${detection}!`, types.SNACKBAR_INFO, 8000);
+			await add_comment(discussion_id, discussion_comment, userData, user.uid);
 			setDiscussions(await get_discussions(user.uid));
 		} catch (err) {
 			console.log(err.message);
@@ -127,7 +135,7 @@ function DashboardScreen() {
 	return (
 		<div className='container-login100' style={{ backgroundImage: 'url("assets/bg-01.jpg")', width: '100%' }}>
 			<Grid style={{ height: '98vh' }} container spacing={2}>
-				<Hidden lgDown>
+				<Hidden mdDown>
 					<Grid style={{ display: 'flex' }} item xs={3}>
 						<Paper style={{ flex: 1, padding: 20, display: 'flex', flexDirection: 'column', alignItems: 'stretch', justifyContent: 'start' }} elevation={5}>
 							<div style={{ display: 'flex', flexDirection: 'row', justifyContent: 'center' }}>
@@ -166,7 +174,7 @@ function DashboardScreen() {
 						</Paper>
 					</Grid>
 				</Hidden>
-				<Grid style={{ display: 'flex' }} item xs={12} lg={9}>
+				<Grid style={{ display: 'flex' }} item xs={12} md={9}>
 					<div style={{ flex: 1, width: '100%', display: 'flex', flexDirection: 'column', alignItems: 'stretch' }}>
 						<Paper onClick={() => setIsDialogOpen(true)} style={{ margin: 10, marginTop: 0, flex: 1, backgroundColor: 'whitesmoke', display: 'flex', flexDirection: 'row', justifyContent: 'center' }} component={ButtonBase} elevation={5}>
 							<CreateIcon />
